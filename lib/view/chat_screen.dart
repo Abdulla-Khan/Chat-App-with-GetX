@@ -26,57 +26,26 @@ class ChatScreen extends StatelessWidget {
               height: s.height / 1.25,
               width: s.width,
               child: StreamBuilder(
-                // init: Get.put(ChatController().messageStream()),
-                stream: FirebaseFirestore.instance
-                    .collection(
-                        'chats/${controller.getGroupId.toString()}/message')
-                    .orderBy('time', descending: true)
-                    .snapshots(),
-                builder: (c, snap) => snap.hasData
-                    ? ListView.builder(
-                        reverse: true,
-                        itemCount: snap.data!.docs.length,
-                        //     // Get.find<ChatController>().messageList.value.length,
-                        itemBuilder: (context, index) {
-                          // List<MessageModel> message =
-                          //     Get.find<ChatController>().messages;
-                          return messages(
-                              s,
-                              snap.data!.docs[index]['message'],
-                              snap.data!.docs[index]['sentTo'],
-                              snap.data!.docs[index]['sentBy']);
-                        })
-                    : CircularProgressIndicator(),
-              ),
+                  stream: FirebaseFirestore.instance
+                      .collection(
+                          'chats/${controller.getGroupId.toString()}/message')
+                      .orderBy('time', descending: true)
+                      .snapshots(),
+                  builder: (c, snap) {
+                    return snap.hasData
+                        ? ListView.builder(
+                            reverse: true,
+                            itemCount: snap.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              return messages(
+                                  s,
+                                  snap.data!.docs[index]['message'],
+                                  snap.data!.docs[index]['sentTo'],
+                                  snap.data!.docs[index]['sentBy']);
+                            })
+                        : CircularProgressIndicator();
+                  }),
             ),
-            // GetX<ChatController>
-            // Obx(() {
-            // init: Get.find<ChatController>(),
-            // builder: (context) {
-            // return
-            // StreamBuilder(
-            //     stream: controller.messageStream(),
-            //     builder: (context, AsyncSnapshot asyncSnapshot) {
-            //       List<MessageModel> message =
-            //           Get.find<ChatController>().messages;
-
-            // return SizedBox(
-            //     height: s.height / 1.25,
-            //     width: s.width,
-            //           child: ListView.builder(
-            //             reverse: true,
-            //             itemCount: message.length,
-            //             itemBuilder: (context, index) {
-            //               return messages(
-            //                 s,
-            //                 message[index].message,
-            //                 message[index].sentTo,
-            //                 message[index].sentBy,
-            //               );
-            //             },
-            //           ));
-            //     }),
-            // }),
             Container(
               height: s.height / 10,
               width: s.width,

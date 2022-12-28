@@ -15,7 +15,6 @@ class ChatController extends GetxController {
 
   @override
   void onInit() {
-    messageList.bindStream(messageStream());
     super.onInit();
   }
 
@@ -30,8 +29,8 @@ class ChatController extends GetxController {
       'sentTo': a,
     });
   }
- 
-   Stream<List<MessageModel>> messageStream() {
+
+  Stream<List<MessageModel>> messageStream() {
     return firestore
         .collection('chats/${getGroupId.toString()}/message')
         .orderBy('time', descending: true)
@@ -42,9 +41,8 @@ class ChatController extends GetxController {
         final messageModel = MessageModel.fromDocumentSnapshot(mess);
         messages.add(messageModel);
       }
-      
+
       return messages;
     });
   }
-  
 }
