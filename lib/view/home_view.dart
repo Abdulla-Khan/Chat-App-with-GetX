@@ -1,5 +1,6 @@
 import 'package:chat_getx/controller/home_controller.dart';
 import 'package:chat_getx/view/chat_screen.dart';
+import 'package:chat_getx/view/chat_tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,10 +11,21 @@ class HomeView extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Available Users'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Get.to(() => ChatTile());
+              },
+              icon: Icon(Icons.message))
+        ],
+      ),
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 10, right: 10, top: 60),
+            margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
             width: size.width,
             height: size.width * 0.2,
             decoration: BoxDecoration(
@@ -41,9 +53,11 @@ class HomeView extends StatelessWidget {
                             ),
                             trailing: IconButton(
                               icon: const Icon(Icons.message),
-                              onPressed: () => Get.to(() => ChatScreen(),
-                                  arguments:
-                                      Get.find<HomeController>().todos[0].uid),
+                              onPressed: () =>
+                                  Get.to(() => ChatScreen(), arguments: [
+                                Get.find<HomeController>().todos[0].uid,
+                                Get.find<HomeController>().todos[0].name
+                              ]),
                             ),
                           );
                         });

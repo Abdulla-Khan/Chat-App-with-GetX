@@ -33,19 +33,4 @@ class HomeController extends GetxController {
       return todos;
     });
   }
-
-  on(a) async {
-    late bool doesExist;
-
-    final doc = await FirebaseFirestore.instance
-        .collection('chats')
-        .doc(a + '&' + FirebaseAuth.instance.currentUser!.uid)
-        .collection('messages')
-        .get()
-        .then((doc) {
-      doesExist = doc.docs.isNotEmpty;
-      print(a + '&' + FirebaseAuth.instance.currentUser!.uid);
-    });
-    print(doesExist);
-  }
 }

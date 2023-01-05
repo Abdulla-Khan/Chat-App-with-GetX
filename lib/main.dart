@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialBinding: ControllerBinding(),
-      home: AuthView(),
+      home: const AuthView(),
     );
   }
 }

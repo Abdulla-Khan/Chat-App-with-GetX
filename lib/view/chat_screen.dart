@@ -1,6 +1,5 @@
 import 'package:chat_getx/controller/chat_controller.dart';
 import 'package:chat_getx/controller/home_controller.dart';
-import 'package:chat_getx/model/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,7 @@ import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen({super.key});
-  var controller = Get.put<ChatController>(ChatController());
+  final controller = Get.put<ChatController>(ChatController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class ChatScreen extends StatelessWidget {
               child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection(
-                          'chats/${controller.getGroupId.toString()}/message')
+                          'chats/${controller.getGroupId().toString()}/message')
                       .orderBy('time', descending: true)
                       .snapshots(),
                   builder: (c, snap) {
@@ -43,7 +42,7 @@ class ChatScreen extends StatelessWidget {
                                   snap.data!.docs[index]['sentTo'],
                                   snap.data!.docs[index]['sentBy']);
                             })
-                        : CircularProgressIndicator();
+                        : const CircularProgressIndicator();
                   }),
             ),
             Container(

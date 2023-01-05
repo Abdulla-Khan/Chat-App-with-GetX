@@ -13,20 +13,27 @@ class ChatController extends GetxController {
   var a = Get.arguments;
   var user = FirebaseAuth.instance.currentUser!.uid;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   String getGroupId() =>
-      user.hashCode <= a.hashCode ? "${user}_$a" : "${a}_$user";
+      user.hashCode <= a[0].hashCode ? "${user}_${a[0]}" : "${a[0]}_$user";
 
   sendMessage() {
-    firestore.collection('chats/${getGroupId.toString()}/message').add({
+    firestore.collection('chats/${getGroupId().toString()}/message').add({
       'message': message.text,
       'time': FieldValue.serverTimestamp(),
       'sentBy': user,
-      'sentTo': a,
+      'sentTo': a[0],
+    }).whenComplete(() {
+      firestore
+          .collection('chats')
+          .doc(a[0])
+          .collection('messaged')
+          .doc(user)
+          .set({
+        'messageBy': user,
+        'messageTo': a[0],
+        'senderName': a[1],
+        'lastMessage': message.text.trim()
+      });
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_getx/view/home_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +17,17 @@ class AuthController extends GetxController {
       FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: email.text, password: password.text)
+          .whenComplete(() => Get.offAll(() => HomeView()));
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(e.toString(), '');
+    }
+  }
+
+  void signUp() {
+    try {
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: email.text, password: password.text)
           .whenComplete(() async {
         await FirebaseFirestore.instance.collection('users').add({
           'name': name.text,
@@ -22,11 +35,11 @@ class AuthController extends GetxController {
           'password': password.text,
           'uid': FirebaseAuth.instance.currentUser!.uid,
         }).whenComplete(() {
-          Get.offAll(() => HomeView());
+          Get.offAll(() => const HomeView());
         });
       });
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('e', '');
+      log(e.toString());
     }
   }
 }
